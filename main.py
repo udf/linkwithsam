@@ -7,7 +7,7 @@ import sqlite3
 import logging
 import os
 
-ACCEPTED_HOSTS = set(['assfixingafistant.github.io'])
+ACCEPTED_HOSTS = set(['assfixingafistant.github.io', 'localhost'])
 CORS_ALLOW_ORIGINS = ["https://assfixingafistant.github.io", "http://localhost:8080"]
 
 logging.basicConfig(level=logging.INFO)
@@ -119,7 +119,7 @@ async def api_post_create(req: web.Request):
   parsed_url = parsed_url._replace(scheme='https')
 
   shortcode = create_shortcode(parsed_url.geturl(), req_ip)
-  return web.json_response({'path': f'/{shortcode_encode(shortcode)}'})
+  return web.json_response({'path': shortcode_encode(shortcode)})
 
 
 app = web.Application()
