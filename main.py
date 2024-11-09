@@ -92,7 +92,8 @@ async def api_get_shortcode(req: web.Request):
   url = get_url(shortcode)
   if not url:
     return web.json_response({'error': 'unknown shortcode'}, status=404)
-  print(req.headers.get('Accept'))
+  if 'noredir' in req.url.query:
+    return web.json_response({'url': url})
   return web.json_response(
     {'url': url},
     status=302,
