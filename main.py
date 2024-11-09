@@ -1,4 +1,5 @@
 from aiohttp import web
+import aiohttp_cors
 
 import base64
 import urllib.parse
@@ -7,6 +8,7 @@ import logging
 import os
 
 ACCEPTED_HOSTS = set(['assfixingafistant.github.io'])
+CORS_ALLOW_ORIGINS = ["https://assfixingafistant.github.io", "http://localhost:8080"]
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('main')
@@ -122,4 +124,17 @@ async def api_post_create(req: web.Request):
 
 app = web.Application()
 app.add_routes(routes)
+
+cors_options = aiohttp_cors.ResourceOptions(
+  expose_headers="*",
+  allow_headers="*",
+)
+cors = aiohttp_cors.setup(app, defaults={
+  origin: cors_options
+  for origin in CORS_ALLOW_ORIGINS
+})
+
+for route in app.router.routes():
+  cors.add(route)
+
 web.run_app(app, port=9037)
